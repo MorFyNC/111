@@ -1,0 +1,59 @@
+﻿@page "/todolist"
+@using System.Collections.Generic
+
+<h3>Список дел</h3>
+
+<input type="text" @bind="NewToDoItem" />
+<button @onclick="AddToDoItem">Добавить</button>
+
+<input type="text" @bind="ToRemoveItem" />
+<button @onclick="RemoveItem">Удалить</button>
+
+<ul>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>№ Дела</th>
+                <th>Дело</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < ToDoItems.Count; i++)
+            {
+                <tr>
+                    <td>@(i+1)</td>
+                    <td>@ToDoItems[i]</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</ul>
+
+@code {
+    private string NewToDoItem { get; set; }
+    private List<string> ToDoItems { get; set; } = new List<string>();
+    private string ToRemoveItem { get; set; }
+
+    private void AddToDoItem()
+    {
+        if (!string.IsNullOrWhiteSpace(NewToDoItem))
+        {
+            ToDoItems.Add(NewToDoItem);
+            NewToDoItem = "";
+        }
+    }
+
+    private void RemoveItem()
+    {
+        try
+        {
+            int index = Convert.ToInt32(ToRemoveItem) - 1;
+            ToDoItems.RemoveAt(index);
+            ToRemoveItem = "";
+        }
+        catch
+        {
+            ToRemoveItem = "Введите корректный номер";
+        }
+    }
+}

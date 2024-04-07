@@ -1,0 +1,86 @@
+﻿@page "/calculator"
+@using System
+
+<h3>Калькулятор</h3>
+
+<input type="text" @bind="Input" /><br /><br />
+
+<button @onclick="Add">+</button>
+<button @onclick="Subtract">-</button>
+<button @onclick="Multiply">*</button>
+<button @onclick="Divide">/</button>
+<button @onclick="Clear">Clear</button><br /><br />
+
+<h4>Результат: @Result</h4>
+
+@code {
+    private string Input { get; set; } = "";
+    private double Result { get; set; } = 0;
+
+    private void Add()
+    {
+        Calculate(Operation.Add);
+    }
+
+    private void Subtract()
+    {
+        Calculate(Operation.Subtract);
+    }
+
+    private void Multiply()
+    {
+        Calculate(Operation.Multiply);
+    }
+
+    private void Divide()
+    {
+        Calculate(Operation.Divide);
+    }
+
+    private void Clear()
+    {
+        Input = "";
+        Result = 0;
+    }
+
+    private void Calculate(Operation operation)
+    {
+        double inputValue;
+        if (double.TryParse(Input, out inputValue))
+        {
+            switch (operation)
+            {
+                case Operation.Add:
+                    Result += inputValue;
+                    break;
+                case Operation.Subtract:
+                    Result -= inputValue;
+                    break;
+                case Operation.Multiply:
+                    Result *= inputValue;
+                    break;
+                case Operation.Divide:
+                    if (inputValue != 0)
+                    {
+                        Result /= inputValue;
+                    }
+                    else
+                    {
+                        Result = double.NaN;
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+        Input = "";
+    }
+
+    private enum Operation
+    {
+        Add,
+        Subtract,
+        Multiply,
+        Divide
+    }
+}
